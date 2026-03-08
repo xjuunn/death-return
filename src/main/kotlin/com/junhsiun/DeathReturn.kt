@@ -1,15 +1,35 @@
 package com.junhsiun
 
+import com.junhsiun.deathrecord.DeathPosCommand
+import com.junhsiun.deathrecord.DeathRecordStore
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.api.ModInitializer
+import net.minecraft.server.network.ServerPlayerEntity
 import org.slf4j.LoggerFactory
 
 object DeathReturn : ModInitializer {
-    private val logger = LoggerFactory.getLogger("death-return")
+    val logger = LoggerFactory.getLogger("death-return")
 
 	override fun onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
-		logger.info("Hello Fabric world!")
+		ServerLifecycleEvents.SERVER_STARTED.register { server ->
+			DeathRecordStore.load(server)
+		}
+
+		ServerLifecycleEvents.SERVER_STOPPING.register {
+			DeathRecordStore.save()
+		}
+
+		ServerLivingEntityEvents.AFTER_DEATH.register(ServerLivingEntityEvents.AfterDeath { entity, _ ->
+			if (entity !is ServerPlayerEntity) {
+				return@AfterDeath
+			}
+
+			DeathRecordStore.recordDeath(entity)
+			DeathPosCommand.notifyPlayer(entity)
+		})
+
+		DeathPosCommand.register()
+		logger.info("Death Return 已加载")
 	}
 }
