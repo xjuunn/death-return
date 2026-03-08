@@ -76,7 +76,7 @@ object DeathRecordStore {
         history.add(
             0,
             DeathRecord(
-                dimension = player.level().dimension().toString(),
+                dimension = DeathDimensionHelper.normalize(player.level().dimension().toString()),
                 x = pos.getX(),
                 y = pos.getY(),
                 z = pos.getZ(),
@@ -112,11 +112,14 @@ object DeathRecordStore {
             element.isJsonArray -> {
                 element.asJsonArray.mapNotNull { item ->
                     runCatching { gson.fromJson(item, recordType) }.getOrNull()
+                }.map { record ->
+                    record.copy(dimension = DeathDimensionHelper.normalize(record.dimension))
                 }.take(MAX_HISTORY)
             }
 
             element.isJsonObject -> {
                 listOfNotNull(runCatching { gson.fromJson(element, recordType) }.getOrNull())
+                    .map { record -> record.copy(dimension = DeathDimensionHelper.normalize(record.dimension)) }
             }
 
             else -> emptyList()

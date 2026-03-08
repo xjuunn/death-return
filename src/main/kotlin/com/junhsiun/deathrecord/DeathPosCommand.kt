@@ -212,17 +212,9 @@ object DeathPosCommand {
     }
 
     private fun resolveLevel(player: ServerPlayer, dimension: String): ServerLevel? {
-        val id = extractDimensionId(dimension) ?: return null
+        val id = DeathDimensionHelper.normalize(dimension)
         val key = ResourceKey.create(Registries.DIMENSION, Identifier.parse(id))
         return player.level().getServer()?.getLevel(key)
-    }
-
-    private fun extractDimensionId(raw: String): String? {
-        return when {
-            raw.startsWith("ResourceKey[") && raw.contains("/ ") -> raw.substringAfter("/ ").substringBefore("]")
-            raw.contains(":") -> raw
-            else -> null
-        }
     }
 
     private fun canUseBaseCommand(isAdmin: Boolean): Boolean {

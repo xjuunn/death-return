@@ -131,14 +131,7 @@ object DeathPosFormatter {
     }
 
     fun formatDimension(dimension: String): String {
-        return when (dimension) {
-            "ResourceKey[minecraft:dimension / minecraft:overworld]" -> "\u4e3b\u4e16\u754c"
-            "ResourceKey[minecraft:dimension / minecraft:the_nether]" -> "\u4e0b\u754c"
-            "ResourceKey[minecraft:dimension / minecraft:the_end]" -> "\u672b\u5730"
-            else -> dimension.substringAfterLast("/")
-                .substringBefore("]")
-                .replace("minecraft:", "")
-        }
+        return DeathDimensionHelper.displayName(dimension)
     }
 
     private fun formatTime(timestamp: Long): String {
