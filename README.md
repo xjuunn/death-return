@@ -41,6 +41,23 @@
 
 ## 安装方式
 
+## 前置依赖
+
+安装本模组前，请确保以下依赖已经同时安装到对应环境的 `mods` 目录中：
+
+| 依赖 | 是否必需 | 说明 |
+| --- | --- | --- |
+| Fabric API | 必需 | 提供 Fabric 事件、命令和运行时 API |
+| Fabric Language Kotlin | 必需 | 本模组使用 Kotlin 编写，缺失时无法加载 |
+
+如果缺少 `fabric-language-kotlin`，游戏启动时会出现类似下面的报错：
+
+```text
+Mod 'Death Return' (death-return) ... requires fabric-language-kotlin, which is missing
+```
+
+因此，无论是客户端单人使用，还是服务端部署，都需要同时安装本模组及其依赖。
+
 ### 专用服务器
 
 将模组放入服务器的 `mods` 目录后即可生效。  
