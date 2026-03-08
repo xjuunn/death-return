@@ -199,7 +199,7 @@ Windows:
 当前版本：
 
 ```text
-1.1.0
+1.1.2
 ```
 
 版本号定义于：
@@ -215,8 +215,8 @@ gradle.properties
 3. 创建并推送 tag，例如：
 
 ```bash
-git tag v1.1.0
-git push origin v1.1.0
+git tag v1.1.2
+git push origin v1.1.2
 ```
 
 4. GitHub Actions 会自动执行以下操作：
