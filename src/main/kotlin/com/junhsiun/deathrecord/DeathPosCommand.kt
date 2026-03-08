@@ -6,6 +6,7 @@ import com.mojang.brigadier.arguments.IntegerArgumentType
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.minecraft.commands.Commands
 import net.minecraft.commands.arguments.EntityArgument
+import net.minecraft.core.registries.Registries
 import net.minecraft.network.chat.Component
 import net.minecraft.resources.Identifier
 import net.minecraft.resources.ResourceKey
@@ -212,7 +213,7 @@ object DeathPosCommand {
 
     private fun resolveLevel(player: ServerPlayer, dimension: String): ServerLevel? {
         val id = extractDimensionId(dimension) ?: return null
-        val key = ResourceKey.create(Level.RESOURCE_KEY, Identifier.parse(id))
+        val key = ResourceKey.create(Registries.DIMENSION, Identifier.parse(id))
         return player.level().getServer()?.getLevel(key)
     }
 
