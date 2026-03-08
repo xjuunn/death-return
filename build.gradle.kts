@@ -6,8 +6,15 @@ plugins {
 	id("org.jetbrains.kotlin.jvm") version "2.3.10"
 }
 
-version = providers.gradleProperty("mod_version").get()
+val modVersion = providers.gradleProperty("mod_version").get()
+val minecraftVersion = providers.gradleProperty("minecraft_version").get()
+val loaderVersion = providers.gradleProperty("loader_version").get()
+val fabricApiVersion = providers.gradleProperty("fabric_api_version").get()
+
+version = modVersion
 group = providers.gradleProperty("maven_group").get()
+
+val artifactVersion = "$modVersion+mc$minecraftVersion+loader$loaderVersion+fabric-api$fabricApiVersion"
 
 base {
 	archivesName = providers.gradleProperty("archives_base_name")
@@ -73,10 +80,19 @@ java {
 
 tasks.jar {
 	inputs.property("archivesName", base.archivesName)
+	archiveVersion = artifactVersion
 
 	from("LICENSE") {
 		rename { "${it}_${base.archivesName.get()}" }
 	}
+}
+
+tasks.named<Jar>("sourcesJar") {
+	archiveVersion = artifactVersion
+}
+
+tasks.named<Jar>("remapJar") {
+	archiveVersion = artifactVersion
 }
 
 // configure the maven publication

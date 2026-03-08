@@ -206,6 +206,13 @@ git push origin v1.1.0
    - 创建对应的 GitHub Release
    - 将构建出的 jar 文件附加到 Release
 
+生成的 jar 文件名会自动包含以下信息：
+
+- 模组版本
+- Minecraft 版本
+- Fabric Loader 版本
+- Fabric API 版本
+
 ### 工作流说明
 
 - `build.yml`
