@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-	id("net.fabricmc.fabric-loom-remap")
+	id("fabric-loom")
 	`maven-publish`
 	id("org.jetbrains.kotlin.jvm") version "2.3.10"
 }
@@ -22,9 +22,12 @@ repositories {
 }
 
 loom {
+	splitEnvironmentSourceSets()
+
 	mods {
 		register("death-return") {
 			sourceSet(sourceSets.main.get())
+			sourceSet(sourceSets.getByName("client"))
 		}
 	}
 }

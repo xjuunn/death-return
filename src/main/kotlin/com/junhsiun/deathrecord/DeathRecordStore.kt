@@ -59,7 +59,7 @@ object DeathRecordStore {
         val pos = player.blockPosition()
         // 只保留最近一次死亡点，保持功能和数据结构足够简单。
         records[player.uuid] = DeathRecord(
-            dimension = player.level().dimension().location().toString(),
+            dimension = player.level().dimension().toString(),
             x = pos.x,
             y = pos.y,
             z = pos.z,
