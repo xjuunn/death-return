@@ -35,8 +35,8 @@ object DeathRecordStore {
                     records[UUID.fromString(uuid)] = record
                 }
             }
-        }.onFailure {
-            DeathReturn.logger.error("读取死亡坐标记录失败: {}", file, it)
+        }.onFailure { throwable ->
+            DeathReturn.logger.error("读取死亡坐标记录失败: {}", file, throwable)
         }
     }
 
@@ -46,25 +46,27 @@ object DeathRecordStore {
 
         runCatching {
             Files.createDirectories(dir)
-            val export = records.mapKeys { it.key.toString() }
+            val export = records.mapKeys { entry -> entry.key.toString() }
             Files.newBufferedWriter(file).use { writer ->
                 gson.toJson(export, mapType, writer)
             }
-        }.onFailure {
-            DeathReturn.logger.error("保存死亡坐标记录失败: {}", file, it)
+        }.onFailure { throwable ->
+            DeathReturn.logger.error("保存死亡坐标记录失败: {}", file, throwable)
         }
     }
 
     fun recordDeath(player: ServerPlayer) {
         val pos = player.blockPosition()
-        // 只保留最近一次死亡点，保持功能和数据结构足够简单。
-        records[player.uuid] = DeathRecord(
+
+        // 只保留最近一次死亡点，保持结构简单。
+        records[player.getUUID()] = DeathRecord(
             dimension = player.level().dimension().toString(),
-            x = pos.x,
-            y = pos.y,
-            z = pos.z,
+            x = pos.getX(),
+            y = pos.getY(),
+            z = pos.getZ(),
             timestamp = System.currentTimeMillis()
         )
+
         save()
     }
 
