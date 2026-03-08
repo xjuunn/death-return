@@ -7,3 +7,8 @@ data class DeathRecord(
     val z: Int,
     val timestamp: Long
 )
+
+data class DeathHistoryEntry(
+    val index: Int,
+    val record: DeathRecord
+)

@@ -9,7 +9,8 @@ import java.nio.file.Path
 data class DeathReturnConfig(
     val announceOnDeath: Boolean = true,
     val allowPlayersUseCommand: Boolean = true,
-    val adminsCanQueryOthers: Boolean = true
+    val adminsCanQueryOthers: Boolean = true,
+    val allowTeleport: Boolean = true
 )
 
 object DeathReturnConfigManager {
@@ -30,14 +31,13 @@ object DeathReturnConfigManager {
             Files.newBufferedReader(configPath).use { reader ->
                 config = gson.fromJson(reader, DeathReturnConfig::class.java) ?: DeathReturnConfig()
             }
-        }.onFailure {
-            DeathReturn.logger.error("读取配置失败: {}", configPath, it)
+        }.onFailure { throwable ->
+            DeathReturn.logger.error("Failed to read config: {}", configPath, throwable)
             config = DeathReturnConfig()
         }
     }
 
     fun update(transform: (DeathReturnConfig) -> DeathReturnConfig) {
-        // 命令修改后立即落盘，避免服务端异常退出导致配置回滚。
         config = transform(config)
         save()
     }
@@ -48,8 +48,8 @@ object DeathReturnConfigManager {
             Files.newBufferedWriter(configPath).use { writer ->
                 gson.toJson(config, writer)
             }
-        }.onFailure {
-            DeathReturn.logger.error("保存配置失败: {}", configPath, it)
+        }.onFailure { throwable ->
+            DeathReturn.logger.error("Failed to save config: {}", configPath, throwable)
         }
     }
 }

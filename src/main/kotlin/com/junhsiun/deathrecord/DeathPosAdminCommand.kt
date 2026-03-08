@@ -1,5 +1,6 @@
 package com.junhsiun.deathrecord
 
+import com.junhsiun.config.DeathReturnConfig
 import com.junhsiun.config.DeathReturnConfigManager
 import com.mojang.brigadier.Command
 import com.mojang.brigadier.arguments.BoolArgumentType
@@ -21,7 +22,7 @@ object DeathPosAdminCommand {
                             .executes { context ->
                                 DeathReturnConfigManager.load()
                                 context.source.sendSuccess(
-                                    { Component.literal("Death Return 配置已重载。") },
+                                    { Component.literal("Death Return \u914d\u7f6e\u5df2\u91cd\u8f7d\u3002") },
                                     true
                                 )
                                 Command.SINGLE_SUCCESS
@@ -29,59 +30,26 @@ object DeathPosAdminCommand {
                     )
                     .then(
                         Commands.literal("set")
-                            .then(
-                                Commands.literal("announceOnDeath")
-                                    .then(
-                                        Commands.argument("value", BoolArgumentType.bool())
-                                            .executes { context ->
-                                                val value = BoolArgumentType.getBool(context, "value")
-                                                DeathReturnConfigManager.update {
-                                                    it.copy(announceOnDeath = value)
-                                                }
-                                                context.source.sendSuccess(
-                                                    { Component.literal("announceOnDeath = $value") },
-                                                    true
-                                                )
-                                                Command.SINGLE_SUCCESS
-                                            }
-                                    )
-                            )
-                            .then(
-                                Commands.literal("allowPlayersUseCommand")
-                                    .then(
-                                        Commands.argument("value", BoolArgumentType.bool())
-                                            .executes { context ->
-                                                val value = BoolArgumentType.getBool(context, "value")
-                                                DeathReturnConfigManager.update {
-                                                    it.copy(allowPlayersUseCommand = value)
-                                                }
-                                                context.source.sendSuccess(
-                                                    { Component.literal("allowPlayersUseCommand = $value") },
-                                                    true
-                                                )
-                                                Command.SINGLE_SUCCESS
-                                            }
-                                    )
-                            )
-                            .then(
-                                Commands.literal("adminsCanQueryOthers")
-                                    .then(
-                                        Commands.argument("value", BoolArgumentType.bool())
-                                            .executes { context ->
-                                                val value = BoolArgumentType.getBool(context, "value")
-                                                DeathReturnConfigManager.update {
-                                                    it.copy(adminsCanQueryOthers = value)
-                                                }
-                                                context.source.sendSuccess(
-                                                    { Component.literal("adminsCanQueryOthers = $value") },
-                                                    true
-                                                )
-                                                Command.SINGLE_SUCCESS
-                                            }
-                                    )
-                            )
+                            .then(booleanNode("announceOnDeath") { value -> copy(announceOnDeath = value) })
+                            .then(booleanNode("allowPlayersUseCommand") { value -> copy(allowPlayersUseCommand = value) })
+                            .then(booleanNode("adminsCanQueryOthers") { value -> copy(adminsCanQueryOthers = value) })
+                            .then(booleanNode("allowTeleport") { value -> copy(allowTeleport = value) })
                     )
             )
         })
     }
+
+    private fun booleanNode(
+        name: String,
+        updater: DeathReturnConfig.(Boolean) -> DeathReturnConfig
+    ) = Commands.literal(name)
+        .then(
+            Commands.argument("value", BoolArgumentType.bool())
+                .executes { context ->
+                    val value = BoolArgumentType.getBool(context, "value")
+                    DeathReturnConfigManager.update { current -> current.updater(value) }
+                    context.source.sendSuccess({ Component.literal("$name = $value") }, true)
+                    Command.SINGLE_SUCCESS
+                }
+        )
 }
