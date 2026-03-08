@@ -9,13 +9,11 @@ plugins {
 
 val modVersion = providers.gradleProperty("mod_version").get()
 val minecraftVersion = providers.gradleProperty("minecraft_version").get()
-val loaderVersion = providers.gradleProperty("loader_version").get()
-val fabricApiVersion = providers.gradleProperty("fabric_api_version").get()
 
 version = modVersion
 group = providers.gradleProperty("maven_group").get()
 
-val artifactVersion = "$modVersion+mc$minecraftVersion+loader$loaderVersion+fabric-api$fabricApiVersion"
+val artifactVersion = "$modVersion-fabricmc$minecraftVersion"
 
 base {
 	archivesName = providers.gradleProperty("archives_base_name")

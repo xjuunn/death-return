@@ -229,8 +229,12 @@ git push origin v1.1.2
 
 - 模组版本
 - Minecraft 版本
-- Fabric Loader 版本
-- Fabric API 版本
+
+示例：
+
+```text
+death-return-1.1.2-fabricmc1.21.11.jar
+```
 
 ### 工作流说明
 
