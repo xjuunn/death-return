@@ -14,6 +14,7 @@
 - [配置说明](#配置说明)
 - [数据存储](#数据存储)
 - [开发与构建](#开发与构建)
+- [版本发布](#版本发布)
 
 ## 功能概览
 
@@ -169,6 +170,48 @@ Windows:
 ```powershell
 .\gradlew.bat runServer
 ```
+
+## 版本发布
+
+项目当前采用基于 Git tag 的自动发布方式。
+
+### 版本号
+
+当前版本：
+
+```text
+1.1.0
+```
+
+版本号定义于：
+
+```text
+gradle.properties
+```
+
+### 发布流程
+
+1. 修改 `gradle.properties` 中的 `mod_version`
+2. 提交版本变更
+3. 创建并推送 tag，例如：
+
+```bash
+git tag v1.1.0
+git push origin v1.1.0
+```
+
+4. GitHub Actions 会自动执行以下操作：
+   - 使用 JDK 21 构建项目
+   - 生成 `build/libs/` 下的发布产物
+   - 创建对应的 GitHub Release
+   - 将构建出的 jar 文件附加到 Release
+
+### 工作流说明
+
+- `build.yml`
+  - 用于常规提交和 Pull Request 构建验证
+- `release.yml`
+  - 仅在推送 `v*` 格式 tag 时触发自动发布
 
 ## 说明
 
