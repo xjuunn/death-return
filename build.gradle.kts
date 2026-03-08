@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
 
 plugins {
 	id("fabric-loom")
@@ -91,7 +92,7 @@ tasks.named<Jar>("sourcesJar") {
 	archiveVersion = artifactVersion
 }
 
-tasks.named<Jar>("remapJar") {
+tasks.named<AbstractArchiveTask>("remapJar") {
 	archiveVersion = artifactVersion
 }
 
