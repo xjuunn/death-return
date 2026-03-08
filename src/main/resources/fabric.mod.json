@@ -3,13 +3,12 @@
 	"id": "death-return",
 	"version": "${version}",
 	"name": "Death Return",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "极简死亡坐标记录器，记录并查询玩家最近一次死亡位置。",
 	"authors": [
-		"Me!"
+		"junhsiun"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/junhsiun/death-return"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/death-return/icon.png",
@@ -20,30 +19,11 @@
 				"value": "com.junhsiun.DeathReturn",
 				"adapter": "kotlin"
 			}
-		],
-		"client": [
-			{
-				"value": "com.junhsiun.DeathReturnClient",
-				"adapter": "kotlin"
-			}
-		],
-		"fabric-datagen": [
-			{
-				"value": "com.junhsiun.DeathReturnDataGenerator",
-				"adapter": "kotlin"
-			}
 		]
 	},
-	"mixins": [
-		"death-return.mixins.json",
-		{
-			"config": "death-return.client.mixins.json",
-			"environment": "client"
-		}
-	],
 	"depends": {
-		"fabricloader": ">=0.18.4",
-		"minecraft": "~1.21.11",
+		"fabricloader": ">=0.16.0",
+		"minecraft": ">=1.21 <=1.21.11",
 		"java": ">=21",
 		"fabric-api": "*",
 		"fabric-language-kotlin": "*"

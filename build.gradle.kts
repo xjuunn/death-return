@@ -22,19 +22,10 @@ repositories {
 }
 
 loom {
-	splitEnvironmentSourceSets()
-
 	mods {
 		register("death-return") {
 			sourceSet(sourceSets.main.get())
-			sourceSet(sourceSets.getByName("client"))
 		}
-	}
-}
-
-fabricApi {
-	configureDataGeneration {
-		client = true
 	}
 }
 
