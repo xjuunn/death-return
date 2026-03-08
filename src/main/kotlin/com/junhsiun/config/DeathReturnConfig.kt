@@ -37,6 +37,7 @@ object DeathReturnConfigManager {
     }
 
     fun update(transform: (DeathReturnConfig) -> DeathReturnConfig) {
+        // 命令修改后立即落盘，避免服务端异常退出导致配置回滚。
         config = transform(config)
         save()
     }

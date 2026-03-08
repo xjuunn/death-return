@@ -18,6 +18,7 @@ object DeathRecordStore {
     private var storagePath: Path? = null
 
     fun load(server: MinecraftServer) {
+        // 使用世界存档目录，确保单人/多人都按存档隔离记录。
         val dir = server.getSavePath(WorldSavePath.ROOT).resolve("death-return")
         val file = dir.resolve("death-records.json")
         storagePath = file
@@ -56,6 +57,7 @@ object DeathRecordStore {
 
     fun recordDeath(player: ServerPlayerEntity) {
         val pos = player.blockPos
+        // 只记录最近一次死亡位置，保持功能极简。
         records[player.uuid] = DeathRecord(
             dimension = player.serverWorld.registryKey.value.toString(),
             x = pos.x,
