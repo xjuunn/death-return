@@ -2,8 +2,10 @@
 
 极简 Fabric 死亡坐标记录器。
 
-- 玩家死亡时自动记录最近一次死亡维度和坐标
-- 玩家使用 `/deathpos` 查询自己的最近死亡点
+- 玩家死亡时自动记录死亡维度和坐标
+- 每位玩家保留最近 `20` 次死亡历史
+- 玩家使用 `/deathpos` 以分页列表查看死亡记录
+- 支持点击传送回对应死亡点
 - 管理员可查询他人记录并在线修改配置
 - 同时支持服务端和客户端安装
 - 多人服务器场景下，客户端可不安装也能正常连接和使用
@@ -27,9 +29,15 @@
 ## 命令
 
 - `/deathpos`
-  - 查询自己最近一次死亡坐标
-- `/deathpos <玩家>`
-  - 管理员查询目标玩家最近一次死亡坐标
+  - 查看自己的死亡历史第一页
+- `/deathpos page <页码>`
+  - 查看自己的指定页历史
+- `/deathpos tp <编号>`
+  - 传送到自己的指定死亡记录
+- `/deathpos player <玩家>`
+  - 管理员查看目标玩家的死亡历史第一页
+- `/deathpos player <玩家> page <页码>`
+  - 管理员查看目标玩家的指定页历史
 - `/deathposadmin reload`
   - 重载配置文件
 - `/deathposadmin set announceOnDeath <true|false>`
@@ -38,6 +46,15 @@
   - 控制普通玩家是否可使用 `/deathpos`
 - `/deathposadmin set adminsCanQueryOthers <true|false>`
   - 控制管理员是否可查询他人记录
+- `/deathposadmin set allowTeleport <true|false>`
+  - 控制是否允许玩家传送回死亡点
+
+## 交互说明
+
+- 玩家死亡后会立即收到一条简洁消息，直接显示本次死亡坐标。
+- 消息中包含 `查看历史` 和 `传送回去` 按钮，点击即可操作。
+- `/deathpos` 列表中每条记录都带有 `传送` 按钮，默认按“最近一次死亡”为 `#1` 排序。
+- 历史记录按每页 `5` 条显示，共保留最近 `20` 条。
 
 ## 配置文件
 
@@ -49,7 +66,8 @@
 {
   "announceOnDeath": true,
   "allowPlayersUseCommand": true,
-  "adminsCanQueryOthers": true
+  "adminsCanQueryOthers": true,
+  "allowTeleport": true
 }
 ```
 
@@ -57,7 +75,7 @@
 
 路径：`<世界存档>/death-return/death-records.json`
 
-每个玩家仅保留“最近一次”死亡坐标。
+每个玩家保留最近 `20` 次死亡记录。
 
 ## 构建
 
