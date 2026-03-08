@@ -3,7 +3,7 @@
 	"id": "death-return",
 	"version": "${version}",
 	"name": "Death Return",
-	"description": "Server-side death position recorder for Fabric.",
+	"description": "Death position recorder for Fabric, usable on both server and client.",
 	"authors": [
 		"junhsiun"
 	],
