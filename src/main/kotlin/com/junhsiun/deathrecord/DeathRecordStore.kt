@@ -4,8 +4,8 @@ import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 import com.junhsiun.DeathReturn
 import net.minecraft.server.MinecraftServer
-import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.util.WorldSavePath
+import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.level.storage.LevelResource
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.UUID
@@ -18,8 +18,8 @@ object DeathRecordStore {
     private var storagePath: Path? = null
 
     fun load(server: MinecraftServer) {
-        // 使用世界存档目录，确保单人/多人都按存档隔离记录。
-        val dir = server.getSavePath(WorldSavePath.ROOT).resolve("death-return")
+        // 使用世界存档目录，保证不同存档之间互不干扰。
+        val dir = server.getWorldPath(LevelResource.ROOT).resolve("death-return")
         val file = dir.resolve("death-records.json")
         storagePath = file
         records.clear()
@@ -55,11 +55,11 @@ object DeathRecordStore {
         }
     }
 
-    fun recordDeath(player: ServerPlayerEntity) {
-        val pos = player.blockPos
-        // 只记录最近一次死亡位置，保持功能极简。
+    fun recordDeath(player: ServerPlayer) {
+        val pos = player.blockPosition()
+        // 只保留最近一次死亡点，保持功能和数据结构足够简单。
         records[player.uuid] = DeathRecord(
-            dimension = player.serverWorld.registryKey.value.toString(),
+            dimension = player.level().dimension().location().toString(),
             x = pos.x,
             y = pos.y,
             z = pos.z,
